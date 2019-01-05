@@ -1,5 +1,5 @@
-import unittest
 import time
+import unittest
 
 from util import no_error, timed_retry
 
