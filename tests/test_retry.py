@@ -3,34 +3,14 @@ from unittest.mock import patch
 import time
 
 import retry
-
-
-def no_error():
-    return 1
-
-
-def fail_n(n):
-    def method():
-        method.count += 1
-        if method.count <= n:
-            raise Exception('fail {} of {}'.format(method.count, n))
-        return method.count
-    method.count = 0
-    return method
+from util import no_error, fail_n, timed_retry
 
 
 class TestRetry(unittest.TestCase):
-    def _repeat(self, method, times=1000):
-        for i in range(1,times):
-            method()
-
     def test_retry(self):
         """ Timing with retry. """
         r = retry.retry()(no_error)
-        start = time.time()
-        self._repeat(r)
-        end = time.time()
-        print('Repeat_time: \t{}'.format(end-start))
+        timed_retry(r)
 
     def test_n_retry(self):
         """ Retries a fixed number of times. """

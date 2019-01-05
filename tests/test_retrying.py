@@ -4,38 +4,15 @@ import unittest
 from unittest.mock import patch
 
 import retrying
-    
-
-def no_error():
-    return 1
-
-
-def fail_n(n):
-    def method():
-        method.count += 1
-        if method.count <= n:
-            raise Exception('fail {} of {}'.format(method.count, n))
-        return method.count
-    method.count = 0
-    return method
+from util import no_error, fail_n, timed_retry
 
 
 class TestRetrying(unittest.TestCase):
-    def _repeat(self, method, times=1000):
-        for i in range(1,times):
-            method()
-
-    def _with_retry(self):
-        self._repeat(r)
-
     def test_retry(self):
         """ Timing with retry. """
 
         r = retrying.retry(no_error)
-        start = time.time()
-        self._repeat(r)
-        end = time.time()
-        print('Repeat_time: \t{}'.format(end-start))
+        timed_retry(r)
 
     def test_n_retry(self):
         """ Retries a fixed number of times. """
@@ -66,7 +43,6 @@ class TestRetrying(unittest.TestCase):
         r = retrying.retry(stop_max_delay=1000, wait_fixed=200)(fail_n(5))
 
         def mock_sleep(s):
-            print('sleeping', s)
             mock_sleep.total += s
         mock_sleep.total = 0.0
         start = time.time()
