@@ -1,6 +1,8 @@
 # test-py-retry
 Benchmarking python retry decorators
 
+[![Build Status](https://travis-ci.com/JettJones/test-py-retry.svg?branch=master)](https://travis-ci.com/JettJones/test-py-retry)
+
 Ideas
 ------
 Functionality
